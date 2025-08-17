@@ -1,0 +1,98 @@
+/*
+Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+*/
+package cmd
+
+import (
+	"bufio"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/spf13/cobra"
+)
+
+var checkCmd = &cobra.Command{
+	Use:   "check",
+	Short: "Verify the integrity of the log file",
+	Long:  "TODO",
+	Run: func(cmd *cobra.Command, args []string) {
+		ensureLogFile(false)
+
+		file, err := os.Open(globalConfig.logFile)
+		if err != nil {
+			fmt.Printf("failed to open log file: %s\n", err)
+			os.Exit(1)
+		}
+		defer file.Close()
+
+		stat, err := file.Stat()
+		if err != nil {
+			fmt.Printf("failed to get log file stats: %s\n", err)
+			os.Exit(1)
+		}
+		fileSize := stat.Size()
+		if fileSize == 0 {
+			fmt.Println("log file is empty")
+			os.Exit(1)
+		}
+
+		scanner := bufio.NewScanner(file)
+		nLines := 0
+		hasError := false
+		var error error
+		var line string
+		var entryBuffer entry
+		for scanner.Scan() {
+			line = scanner.Text()
+			nLines++
+			error = json.Unmarshal([]byte(line), &entryBuffer)
+			if error != nil {
+				hasError = true
+				break
+			}
+			timeStart, err := time.Parse(time.RFC3339, entryBuffer.Start)
+			if err != nil {
+				hasError = true
+				error = err
+				break
+			}
+			if entryBuffer.Stop != "" {
+				timeStop, err := time.Parse(time.RFC3339, entryBuffer.Stop)
+				if err != nil {
+					hasError = true
+					error = err
+					break
+				}
+				if !timeStart.Before(timeStop) {
+					hasError = true
+					error = errors.New("start time comes before stop time")
+					break
+				}
+			} else {
+				fmt.Printf("WARNING: empty stop value in line %d\n", nLines)
+			}
+		}
+
+		if err := scanner.Err(); err != nil {
+			fmt.Printf("error reading log file: %s\n", err)
+			os.Exit(1)
+		}
+
+		if hasError {
+			fmt.Printf("ERROR: %s\nline %d: %s\n", error, nLines, line)
+		} else {
+			fmt.Println("OK")
+		}
+		if hasError {
+			os.Exit(1)
+		}
+		fmt.Printf("read %d entries\n", nLines)
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(checkCmd)
+}
