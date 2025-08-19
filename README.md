@@ -13,7 +13,31 @@
 
 ## Installation
 
+### Release
+
 **TODO**
+
+Using the installer script:
+
+- Linux: `curl | sh`
+- macOS: `curl | sh`
+
+Make sure `~/.local/bin` is in your PATH.
+
+Or manually download the latest release from the releases section.
+
+The installer script does not support Windows but I'd suggest you use WSL2 anyways and install the linux version.
+
+### Source
+
+```
+git clone https://github.com/Criomby/timetreat.git
+cd timetreat
+make install
+
+# or symlink to build in local repo for fast rebuilding of latest branch version
+# make symlink
+```
 
 ## Config
 
@@ -165,4 +189,3 @@ As I am no professional in Go (yet) I made use of Google Gemini in addition to t
 | [Watson](https://github.com/jazzband/Watson) | Python, unmaintained (last commit three years ago) |
 | [timetrap](https://github.com/samg/timetrap) | Ruby |
 | [timetrace](https://github.com/dominikbraun/timetrace?tab=readme-ov-file#generate-a-report-beta)  | Go, unmaintained (last commit two years ago) |
-
