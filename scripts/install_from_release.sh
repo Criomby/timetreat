@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # This script gets the latest release from GitHub and installs it to ~/.local/bin
 

@@ -14,17 +14,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.24'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.24"
 
-    - name: Build
-      run: sh scripts/build_all.sh --archive --version ${{ github.event.release.tag_name }}
+      - name: Build
+        run: bash scripts/build_all.sh --archive --version ${{ github.event.release.tag_name }}
 
-    - name: Upload release artifacts
-      run: gh release upload ${{ github.event.release.tag_name }} $(find ./build -type f)
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload release artifacts
+        run: gh release upload ${{ github.event.release.tag_name }} $(find ./build -type f)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
