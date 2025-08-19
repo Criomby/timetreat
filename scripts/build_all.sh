@@ -16,10 +16,23 @@ targets=(
 )
 
 ARG_ARCHIVE="false"
+ARG_VERSION_TAG=""
 while [[ $# -gt 0 ]]; do
   case $1 in
     --archive)
-    ARG_ARCHIVE="true"
+      ARG_ARCHIVE="true"
+      shift
+      ;;
+    --version)
+      case "$2" in
+        "v"*)
+          ARG_VERSION_TAG="${2#?}_"
+          ;;
+        *)
+          ARG_VERSION_TAG="${2}_"
+          ;;
+      esac
+      shift
       shift
       ;;
     -*|--*)
@@ -44,7 +57,7 @@ for target in "${targets[@]}"; do
     fi
     GOOS="${os}" GOARCH="${arch}" go build -o ./build/${binary_name}
     if [ "${ARG_ARCHIVE}" = "true" ]; then
-        archive_name="${binary_name}_${os}_${arch}.tar.gz"
+        archive_name="timetreat_${ARG_VERSION_TAG}${os}_${arch}.tar.gz"
         cd build
         tar -czf ${archive_name} ${binary_name}
         rm ${binary_name}
