@@ -5,7 +5,7 @@ name: Go build
 
 on:
   release:
-    types: ["published"]
+    types: [published]
 
 permissions:
   contents: write
