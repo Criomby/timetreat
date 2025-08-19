@@ -118,7 +118,7 @@ Then use the function to log to the cocoa log file like this: `timetreat_wrapper
 You can have information about your current task displayed in your starship prompt with this custom module:
 
 ```
-[custom.bartib]
+[custom.timetreat]
 command = "timetreat current --project --duration"
 shell = ["sh", "--norc"]
 when = "timetreat current | grep -q -v 'no task running'"
