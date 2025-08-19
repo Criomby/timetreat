@@ -1,12 +1,13 @@
 <div align="center">
     <img
-        width="512"
+        height="400"
         alt="timetreat-logo"
-        src="./assets/timetreat_logo.jpg"
+        src="https://github.com/user-attachments/assets/982a8376-9976-4b3d-83a7-9530a276782c"
     />
+    <p><b>An easy-to-use and compatible time-tracking command line tool.</b></p>
 </div>
 
-An easy to use and compatible time-tracking command line tool.
+<br>
 
 # Setup
 
@@ -25,6 +26,8 @@ with an absolute path to the file, e.g. `/home/user/timetreat/mytasks.log`. The 
 already exist, the file will be created with the `start` command if it does not exist yet.
 
 If you want to use multiple different log files see advanced usage below.
+
+<br>
 
 # How To
 
@@ -85,6 +88,8 @@ TODO
 
 TODO
 
+<br>
+
 ## Advanced Usage
 
 - Multiple log files
@@ -124,12 +129,14 @@ This will show output in the format ` timetreat - 1h15m46s` at the end of you
 
 Customize this according to your preferences, e.g. showing only project name.
 
+<br>
+
 # Roadmap
 
 *In no particular order.*
 
-- [DONE] Make the location & name of the log file configurable
-- [DONE] Export log as csv
+- :white_check_mark: Make the location & name of the log file configurable via env var
+- :white_check_mark: Export log as csv
 - Ask to replace project name and/or description if provided but already set
 - Generate customizable reports
   - Cli tables
@@ -137,6 +144,10 @@ Customize this according to your preferences, e.g. showing only project name.
   - Html
 - Start/stop from a specific time
 - Round start/stop time (e.g. `stop --round 15m`)
+
+If you'd like to request a feature or have feedback just open a new issue or comment on an existing one.
+
+<br>
 
 # Attributions
 
