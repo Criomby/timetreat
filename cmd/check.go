@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -72,19 +69,19 @@ var checkCmd = &cobra.Command{
 					break
 				}
 			} else {
-				fmt.Printf("WARNING: empty stop value in line %d\n", nLines)
+				fmt.Printf("%s: empty stop value in line %d\n", formattedStringsStyled.Warning, nLines)
 			}
 		}
 
 		if err := scanner.Err(); err != nil {
-			fmt.Printf("error reading log file: %s\n", err)
+			fmt.Printf("%s reading log file: %s\n", formattedStringsStyled.Error, err)
 			os.Exit(1)
 		}
 
 		if hasError {
-			fmt.Printf("ERROR: %s\nline %d: %s\n", error, nLines, line)
+			fmt.Printf(": %s\nline %d: %s\n", formattedStringsStyled.Error, nLines, line)
 		} else {
-			fmt.Println("OK")
+			fmt.Println(formattedStringsStyled.Ok)
 		}
 		if hasError {
 			os.Exit(1)

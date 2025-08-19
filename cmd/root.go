@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -22,8 +19,7 @@ var rootCmd = &cobra.Command{
  | __| | '_ ' _ \ / _ \ __| '__/ _ \/ _' | __|
  | |_| | | | | | |  __/ |_| | |  __/ (_| | |_
   \__|_|_| |_| |_|\___|\__|_|  \___|\__,_|\__|
-
-Time tracking made easy and convenient.`,
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

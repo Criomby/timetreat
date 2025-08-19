@@ -9,6 +9,8 @@ import (
 	"io/fs"
 	"os"
 	"strings"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 // max length of project name and description combined
@@ -42,6 +44,18 @@ var globalConfig appState
 // ╭────────────────────────────╮
 // │           utils            │
 // ╰────────────────────────────╯
+
+type formattedStrings struct {
+	Ok      string
+	Warning string
+	Error   string
+}
+
+var formattedStringsStyled *formattedStrings = &formattedStrings{
+	Ok:      lipgloss.NewStyle().Foreground(lipgloss.Color("10")).Render("Ok"),
+	Warning: lipgloss.NewStyle().Foreground(lipgloss.Color("11")).Render("Warning"),
+	Error:   lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render("Error"),
+}
 
 // DEBUG convenience function to panic errors,
 // TODO replace for production

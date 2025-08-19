@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -33,8 +30,7 @@ var stopCmd = &cobra.Command{
 		curTask.Stop = ts.Format(time.RFC3339)
 		// project name
 		if curTask.Project == "" && stopProject == "" {
-			// TODO ask for project name
-			fmt.Println("WARNING: empty project name")
+			fmt.Printf("%s: empty project name\n", formattedStringsStyled.Warning)
 		} else if curTask.Project == "" && stopProject != "" {
 			curTask.Project = stopProject
 		}

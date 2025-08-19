@@ -1,13 +1,12 @@
-```
-  _   _                _                  _
- | | (_)              | |                | |
- | |_ _ _ __ ___   ___| |_ _ __ ___  __ _| |_
- | __| | '_ ' _ \ / _ \ __| '__/ _ \/ _' | __|
- | |_| | | | | | |  __/ |_| | |  __/ (_| | |_
-  \__|_|_| |_| |_|\___|\__|_|  \___|\__,_|\__|
-```
+<div align="center">
+    <img
+        width="512"
+        alt="timetreat-logo"
+        src="./assets/timetreat_logo.jpg"
+    />
+</div>
 
-A universal and easy to use time-tracking tool with export function for further processing.
+An easy to use and compatible time-tracking command line tool.
 
 # Setup
 
@@ -135,7 +134,7 @@ Customize this according to your preferences, e.g. showing only project name.
 - Generate customizable reports
   - Cli tables
   - Markdown
-  - ...
+  - Html
 - Start/stop from a specific time
 - Round start/stop time (e.g. `stop --round 15m`)
 
@@ -152,6 +151,7 @@ As I am no professional in Go (yet) I made use of Google Gemini in addition to t
 | Project    | Status |
 | -------- | ------- |
 | [taskwarrior](https://github.com/GothenburgBitFactory/taskwarrior) | C++ |
-| [Watson](https://github.com/jazzband/Watson) | unmaintained (last commit three years ago), Python |
+| [Watson](https://github.com/jazzband/Watson) | Python, unmaintained (last commit three years ago) |
 | [timetrap](https://github.com/samg/timetrap) | Ruby |
-| [timetrace](https://github.com/dominikbraun/timetrace?tab=readme-ov-file#generate-a-report-beta)  | unmaintained (last commit two years ago), Go |
+| [timetrace](https://github.com/dominikbraun/timetrace?tab=readme-ov-file#generate-a-report-beta)  | Go, unmaintained (last commit two years ago) |
+
