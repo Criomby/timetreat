@@ -19,8 +19,10 @@
 
 Using the installer script:
 
-- Linux: `curl | sh`
-- macOS: `curl | sh`
+- Linux & macOS:
+```sh
+curl -sS https://raw.githubusercontent.com/Criomby/timetreat/refs/heads/main/scripts/install_from_release.sh | sh
+```
 
 Make sure `~/.local/bin` is in your PATH.
 
