@@ -12,6 +12,7 @@ var (
 	startProject     string
 	startPrev        bool
 	startDescription string
+	startTime        string
 )
 
 var startCmd = &cobra.Command{
@@ -47,6 +48,15 @@ var startCmd = &cobra.Command{
 		}
 
 		ts := time.Now().Local()
+		if startTime != "" {
+			parsedTime, err := time.Parse(timeArgLayout, startTime)
+			if err != nil {
+				fmt.Printf("%s: %s\n", formattedStringsStyled.Error, err)
+				os.Exit(1)
+			}
+			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
+		}
+
 		writeLogEntry(&entry{
 			Start:       ts.Format(time.RFC3339),
 			Project:     project,
@@ -66,6 +76,7 @@ func init() {
 	startCmd.Flags().StringVarP(&startProject, "project", "p", "", "project name")
 	startCmd.Flags().BoolVar(&startPrev, "prev", false, "copy the last used project name for this entry")
 	startCmd.Flags().StringVarP(&startDescription, "description", "d", "", "activity description")
+	startCmd.Flags().StringVarP(&startTime, "time", "t", "", "from a specific time (HH:MM)")
 }
 
 // verify the length of project name and description

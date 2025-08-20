@@ -16,6 +16,9 @@ import (
 // max length of project name and description combined
 const maxLenProDesc = 150
 
+// Layout of time option value for start/stop commands.
+const timeArgLayout string = "15:04"
+
 // an activity file entry json struct
 type entry struct {
 	Start       string `json:"start"`
