@@ -7,11 +7,11 @@ build:
 
 .PHONY: install
 install: build
-	cp ./timetreat ~/.local/bin/timetreat
+	cp ./build/timetreat ~/.local/bin/timetreat
 
 .PHONY: symlink
 symlink: build
-	ln -sf $(PROJECT_DIR)timetreat ~/.local/bin/timetreat
+	ln -sf $(PROJECT_DIR)build/timetreat ~/.local/bin/timetreat
 
 .PHONY: leaks
 leaks:
