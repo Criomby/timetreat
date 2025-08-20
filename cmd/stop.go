@@ -11,6 +11,7 @@ import (
 var (
 	stopProject     string
 	stopDescription string
+	stopTime        string
 )
 
 var stopCmd = &cobra.Command{
@@ -27,7 +28,23 @@ var stopCmd = &cobra.Command{
 		checkTaskIsRunning(&curTask)
 
 		ts := time.Now().Local()
+		if stopTime != "" {
+			parsedTime, err := time.Parse(timeArgLayout, stopTime)
+			if err != nil {
+				fmt.Printf("%s: %s\n", formattedStringsStyled.Error, err)
+				os.Exit(1)
+			}
+			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
+		}
+
+		start, err := time.Parse(time.RFC3339, curTask.Start)
+		if ts.Before(start) {
+			fmt.Printf("%s: Stop time before start time\n", formattedStringsStyled.Error)
+			os.Exit(1)
+		}
+
 		curTask.Stop = ts.Format(time.RFC3339)
+
 		// project name
 		if curTask.Project == "" && stopProject == "" {
 			fmt.Printf("%s: empty project name\n", formattedStringsStyled.Warning)
@@ -58,9 +75,8 @@ var stopCmd = &cobra.Command{
 		removeLastLogEntry(offset)
 		writeLogEntry(&curTask)
 
-		start, err := time.Parse(time.RFC3339, curTask.Start)
 		checkErr(err)
-		fmt.Printf("stopped %s at %s\ntook %s\n", curTask.Project, ts.Format(time.TimeOnly), time.Since(start).Truncate(time.Second).String())
+		fmt.Printf("stopped %s at %s\ntook %s\n", curTask.Project, ts.Format(time.TimeOnly), ts.Sub(start).Truncate(time.Second).String())
 	},
 }
 
@@ -69,4 +85,5 @@ func init() {
 	// stopCmd.Flags().BoolVarP(&noAsk, "no-ask", "n", false, "do not task for missing info")
 	stopCmd.Flags().StringVarP(&stopProject, "project", "p", "", "project name")
 	stopCmd.Flags().StringVarP(&stopDescription, "description", "d", "", "activity description")
+	stopCmd.Flags().StringVarP(&stopTime, "time", "t", "", "from a specific time (HH:MM)")
 }
