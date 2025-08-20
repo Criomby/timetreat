@@ -159,17 +159,15 @@ Customize this according to your preferences, e.g. showing only project name.
 
 # Roadmap
 
-*In no particular order.*
-
 - :white_check_mark: Make the location & name of the log file configurable via env var
 - :white_check_mark: Export log as csv
+- :white_check_mark: Start/stop from a specific time
+- :white_check_mark: Round start/stop time (e.g. `stop --round 15m`)
 - Ask to replace project name and/or description if provided but already set
 - Generate customizable reports
   - Cli tables
   - Markdown
   - Html
-- Start/stop from a specific time
-- Round start/stop time (e.g. `stop --round 15m`)
 
 If you'd like to request a feature or have feedback just open a new issue or comment on an existing one.
 
@@ -180,8 +178,6 @@ If you'd like to request a feature or have feedback just open a new issue or com
 This project was heavily inspired by [`bartib`](https://github.com/nikolassv/bartib) by nikolassv.
 
 I used his project for work to keep track of what I had been working on and how long my working days were becoming and it did a great job at it. However, one of the main drawbacks of the program were the non-standard logging format which hasn't changed despite various PRs and for which I ended up writing a Python script to automate the conversion to JSON entries for archiving and further processing. This is the main reason why I created timetreat and I came up with some more quality-of-life improvements along the way.
-
-As I am no professional in Go (yet) I made use of Google Gemini in addition to the official docs as a wiki to ask various things about how Go works and how I can implement certain functions. However, it made quite severe mistakes along the way and it is currently difficult to get working code out of it. This led me to gaining a pretty good understanding of the language and the algorithms used while debugging, especially for reading & parsing files in buffers from the end of a file and the Go module system.
 
 ## Other Projects
 
