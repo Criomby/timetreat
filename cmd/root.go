@@ -37,7 +37,7 @@ func getLogFilePath() string {
 		if filepath.IsAbs(env) {
 			return env
 		} else {
-			fmt.Printf("log file path must be absolute: %s\n", env)
+			fmt.Printf("%s: log file path must be absolute: %s\n", formattedStringsStyled.Error, env)
 			os.Exit(1)
 		}
 	}

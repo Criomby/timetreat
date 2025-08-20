@@ -45,9 +45,7 @@ var listCmd = &cobra.Command{
 		for nEntries <= listNum {
 			var rowValues []string
 			entry, newOffset, readErr := getLogEntryFromEnd(offset)
-			if readErr != nil && readErr != io.EOF {
-				checkErr(readErr)
-			}
+			checkErr(readErr)
 			checkTaskIsNotZero(&entry)
 			start, err := time.Parse(time.RFC3339, entry.Start)
 			checkErr(err)

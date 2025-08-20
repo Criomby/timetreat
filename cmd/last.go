@@ -22,9 +22,7 @@ var lastCmd = &cobra.Command{
 		var lastUsedAt []string
 		for {
 			entry, newOffset, err := getLogEntryFromEnd(offset)
-			if err != nil && err != io.EOF {
-				checkErr(err)
-			}
+			checkErr(err)
 			checkTaskIsNotZero(&entry)
 			if !slices.Contains(projects, entry.Project) {
 				projects = append(projects, entry.Project)

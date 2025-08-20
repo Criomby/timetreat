@@ -77,8 +77,11 @@ var stopCmd = &cobra.Command{
 		if offset != 0 {
 			offset++
 		}
-		removeLastLogEntry(offset)
-		writeLogEntry(&curTask)
+		err = removeLastLogEntry(offset)
+		checkErr(err)
+
+		err = writeLogEntry(&curTask)
+		checkErr(err)
 
 		fmt.Printf("stopped %s at %s\ntook %s\n", curTask.Project, ts.Format(time.TimeOnly), ts.Sub(start).Truncate(time.Second).String())
 	},

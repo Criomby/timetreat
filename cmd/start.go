@@ -39,10 +39,7 @@ var startCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		if startPrev == true {
-			if prevTask.isZero() {
-				fmt.Println("no previous task exists")
-				os.Exit(1)
-			}
+			checkTaskIsNotZero(&prevTask)
 			project = prevTask.Project
 		} else {
 			project = projectFlagValue
@@ -61,11 +58,12 @@ var startCmd = &cobra.Command{
 			ts = ts.Round(rd)
 		}
 
-		writeLogEntry(&entry{
+		err = writeLogEntry(&entry{
 			Start:       ts.Format(time.RFC3339),
 			Project:     project,
 			Description: startDescription,
 		})
+		checkErr(err)
 
 		output := ts.Format(time.TimeOnly)
 		if project != "" {
