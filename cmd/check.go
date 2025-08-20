@@ -20,20 +20,20 @@ var checkCmd = &cobra.Command{
 
 		file, err := os.Open(globalConfig.logFile)
 		if err != nil {
-			fmt.Printf("failed to open log file: %s\n", err)
+			fmt.Printf("%s: failed to open log file\n%s\n", formattedStringsStyled.Error, err)
 			os.Exit(1)
 		}
 		defer file.Close()
 
 		stat, err := file.Stat()
 		if err != nil {
-			fmt.Printf("failed to get log file stats: %s\n", err)
+			fmt.Printf("%s: failed to get log file stats\n%s\n", formattedStringsStyled.Error, err)
 			os.Exit(1)
 		}
 		fileSize := stat.Size()
 		if fileSize == 0 {
 			fmt.Println("log file is empty")
-			os.Exit(1)
+			os.Exit(0)
 		}
 
 		scanner := bufio.NewScanner(file)
@@ -74,7 +74,7 @@ var checkCmd = &cobra.Command{
 		}
 
 		if err := scanner.Err(); err != nil {
-			fmt.Printf("%s reading log file: %s\n", formattedStringsStyled.Error, err)
+			fmt.Printf("%s: reading log file\n%s\n", formattedStringsStyled.Error, err)
 			os.Exit(1)
 		}
 

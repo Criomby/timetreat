@@ -48,7 +48,7 @@ Supported formats:
 			}
 		}
 		if !isValidFormat {
-			fmt.Printf("unsupported format specified: %s\n", exportFormat)
+			fmt.Printf("%s: unsupported format specified: %s\n", formattedStringsStyled.Error, exportFormat)
 			os.Exit(1)
 		}
 
@@ -61,7 +61,7 @@ Supported formats:
 			checkErr(err)
 			defer file.Close()
 			if err := exportLogFile(file, exportFormat); err != nil {
-				fmt.Println("error writing export file:", err)
+				fmt.Printf("%s: writing export file\n%s\n", formattedStringsStyled.Error, err)
 			} else {
 				fmt.Println("DONE")
 			}

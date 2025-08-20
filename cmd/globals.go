@@ -60,11 +60,12 @@ var formattedStringsStyled *formattedStrings = &formattedStrings{
 	Error:   lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Render("Error"),
 }
 
-// DEBUG convenience function to panic errors,
-// TODO replace for production
+// Convenience function to print errors to stderr with colored output
+// indicating an error if err != nil && err != io.EOF.
 func checkErr(err error) {
 	if err != nil && err != io.EOF {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "%s: %s\n", formattedStringsStyled.Error, err)
+		os.Exit(1)
 	}
 }
 
@@ -188,72 +189,25 @@ func getLogEntryFromEnd(offset int64) (entry, int64, error) {
 	return entryBuffer, newOffset, nil
 }
 
-// TODO remove in favor of getLogEntryFromEnd.
-// Get last entry from log file.
-// Returns the last line entry and the offset of the last line.
-func getLastLogEntry() (entry, int64) {
-	file, err := os.Open(globalConfig.logFile)
-	checkErr(err)
-	defer file.Close()
-
-	stat, err := file.Stat()
-	checkErr(err)
-	fileSize := stat.Size()
-	if fileSize == 0 {
-		fmt.Println("log file is empty")
-		os.Exit(1)
-	}
-
-	bufferSize := int64(512) // at maxLenProDesc == 50
-	if fileSize < bufferSize {
-		bufferSize = fileSize
-	}
-
-	buffer := make([]byte, bufferSize)
-	_, err = file.ReadAt(buffer, fileSize-bufferSize)
-	checkErr(err)
-
-	var lastLine string
-	var offset int64
-	for i := bufferSize - 2; i >= 0; i-- {
-		if buffer[i] == '\n' {
-			offset = fileSize - bufferSize + int64(i) + 1
-			lastLine = string(buffer[i+1:])
-			break
-		}
-	}
-	if lastLine == "" {
-		lastLine = string(buffer)
-		offset = 0
-	}
-
-	var entryBuffer entry
-	err = json.Unmarshal([]byte(lastLine), &entryBuffer)
-	if err != nil {
-		fmt.Println("Cannot get log entry:", err)
-		fmt.Println(lastLine)
-		os.Exit(1)
-	}
-	return entryBuffer, offset
-}
-
-func removeLastLogEntry(offset int64) {
+func removeLastLogEntry(offset int64) error {
 	file, err := os.OpenFile(globalConfig.logFile, os.O_RDWR, 0644)
 	checkErr(err)
 	defer file.Close()
 	if err := file.Truncate(offset); err != nil {
-		checkErr(err)
+		return err
 	}
+	return nil
 }
 
-func writeLogEntry(task *entry) {
+func writeLogEntry(task *entry) error {
 	taskBytes, _ := json.Marshal(task)
 	file, err := os.OpenFile(globalConfig.logFile, os.O_APPEND|os.O_WRONLY, 0644)
 	checkErr(err)
 	defer file.Close()
 	if _, err := file.WriteString(string(taskBytes) + "\n"); err != nil {
-		checkErr(err)
+		return err
 	}
+	return nil
 }
 
 func checkTaskIsRunning(task *entry) {
