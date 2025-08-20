@@ -13,6 +13,7 @@ var (
 	startPrev        bool
 	startDescription string
 	startTime        string
+	startRound       string
 )
 
 var startCmd = &cobra.Command{
@@ -23,10 +24,10 @@ var startCmd = &cobra.Command{
 		ensureLogFile(true)
 		checkArgsProjectDescription(startProject, startDescription)
 
-		// TODO check if curent task is running and end it gracefully if it is
 		prevTask, _, err := getLogEntryFromEnd(0)
 		checkErr(err)
 		if !prevTask.isZero() && prevTask.Stop == "" {
+			// TODO check if curent task is running and end it gracefully if it is
 			fmt.Println("previous task is still running, stop it first")
 			os.Exit(1)
 		}
@@ -47,14 +48,17 @@ var startCmd = &cobra.Command{
 			project = projectFlagValue
 		}
 
+		// start time
 		ts := time.Now().Local()
 		if startTime != "" {
 			parsedTime, err := time.Parse(timeArgLayout, startTime)
-			if err != nil {
-				fmt.Printf("%s: %s\n", formattedStringsStyled.Error, err)
-				os.Exit(1)
-			}
+			checkErr(err)
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
+		}
+		if startRound != "" {
+			rd, err := time.ParseDuration(stopRound)
+			checkErr(err)
+			ts = ts.Round(rd)
 		}
 
 		writeLogEntry(&entry{
@@ -77,12 +81,13 @@ func init() {
 	startCmd.Flags().BoolVar(&startPrev, "prev", false, "copy the last used project name for this entry")
 	startCmd.Flags().StringVarP(&startDescription, "description", "d", "", "activity description")
 	startCmd.Flags().StringVarP(&startTime, "time", "t", "", "from a specific time (HH:MM)")
+	startCmd.Flags().StringVarP(&startRound, "round", "r", "", "round time by e.g. '15m'")
 }
 
 // verify the length of project name and description
 func checkArgsProjectDescription(project string, description string) {
 	if len(project)+len(description) > maxLenProDesc {
-		fmt.Printf("project name and description too long (max %d chars, is %d chars)\n", maxLenProDesc, len(project)+len(description))
+		fmt.Fprintf(os.Stderr, "%s: project name and description too long (max %d chars, is %d chars)\n", formattedStringsStyled.Error, maxLenProDesc, len(project)+len(description))
 		os.Exit(1)
 	}
 }

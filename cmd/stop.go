@@ -12,6 +12,7 @@ var (
 	stopProject     string
 	stopDescription string
 	stopTime        string
+	stopRound       string
 )
 
 var stopCmd = &cobra.Command{
@@ -27,17 +28,21 @@ var stopCmd = &cobra.Command{
 		checkTaskIsNotZero(&curTask)
 		checkTaskIsRunning(&curTask)
 
+		// stop time
 		ts := time.Now().Local()
 		if stopTime != "" {
 			parsedTime, err := time.Parse(timeArgLayout, stopTime)
-			if err != nil {
-				fmt.Printf("%s: %s\n", formattedStringsStyled.Error, err)
-				os.Exit(1)
-			}
+			checkErr(err)
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
+		}
+		if stopRound != "" {
+			rd, err := time.ParseDuration(stopRound)
+			checkErr(err)
+			ts = ts.Round(rd)
 		}
 
 		start, err := time.Parse(time.RFC3339, curTask.Start)
+		checkErr(err)
 		if ts.Before(start) {
 			fmt.Printf("%s: Stop time before start time\n", formattedStringsStyled.Error)
 			os.Exit(1)
@@ -51,11 +56,11 @@ var stopCmd = &cobra.Command{
 		} else if curTask.Project == "" && stopProject != "" {
 			curTask.Project = stopProject
 		}
+
 		// description
 		if curTask.Description == "" && stopDescription == "" {
 			// TODO ask for description
 		} else if stopDescription != "" {
-			// append description passed
 			totalLen := len(curTask.Project) + len(curTask.Description) + len(stopDescription)
 			if totalLen > maxLenProDesc {
 				fmt.Printf("description too long (max %d chars, is %d chars)\n", maxLenProDesc, totalLen)
@@ -75,7 +80,6 @@ var stopCmd = &cobra.Command{
 		removeLastLogEntry(offset)
 		writeLogEntry(&curTask)
 
-		checkErr(err)
 		fmt.Printf("stopped %s at %s\ntook %s\n", curTask.Project, ts.Format(time.TimeOnly), ts.Sub(start).Truncate(time.Second).String())
 	},
 }
@@ -86,4 +90,5 @@ func init() {
 	stopCmd.Flags().StringVarP(&stopProject, "project", "p", "", "project name")
 	stopCmd.Flags().StringVarP(&stopDescription, "description", "d", "", "activity description")
 	stopCmd.Flags().StringVarP(&stopTime, "time", "t", "", "from a specific time (HH:MM)")
+	stopCmd.Flags().StringVarP(&stopRound, "round", "r", "", "round time by e.g. 15m, 1m, etc.")
 }
