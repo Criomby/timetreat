@@ -2,7 +2,7 @@
     <img
         height="400"
         alt="timetreat-logo"
-        src="https://github.com/user-attachments/assets/982a8376-9976-4b3d-83a7-9530a276782c"
+        src="assets/timetreat_blister.png"
     />
     <p><b>An easy-to-use and compatible time-tracking command line tool.</b></p>
 </div>
@@ -182,9 +182,9 @@ I used his project for work to keep track of what I had been working on and how 
 
 ## Other Projects
 
-| Project    | Status |
+| Project    | Description |
 | -------- | ------- |
-| [taskwarrior](https://github.com/GothenburgBitFactory/taskwarrior) | C++ |
-| [Watson](https://github.com/jazzband/Watson) | Python, unmaintained (last commit three years ago) |
-| [timetrap](https://github.com/samg/timetrap) | Ruby |
-| [timetrace](https://github.com/dominikbraun/timetrace?tab=readme-ov-file#generate-a-report-beta)  | Go, unmaintained (last commit two years ago) |
+| [taskwarrior](https://github.com/GothenburgBitFactory/taskwarrior) | <ul><li>Focus on task management</li><li>Powerful & (very) complex cli</li><li>Highly customizable</li><li>C++</li></ul> |
+| [Watson](https://github.com/jazzband/Watson) | <ul><li>Edit entries and generate reports</li><li>Simple interface</li><li>Python</li><li>unmaintained (last commit three years ago)</li></ul> |
+| [timetrap](https://github.com/samg/timetrap) | <ul><li>Manage entries in timesheets</li><li>Uses natural language</li><li>Various export formats</li><li>Ruby</li></ul> |
+| [timetrace](https://github.com/dominikbraun/timetrace)  | <ul><li>Simple and basic feature set</li><li>Only json exports</li><li>Go</li><li>unmaintained (last commit two years ago)</li></ul> |
