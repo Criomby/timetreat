@@ -5,6 +5,7 @@ import (
 	"cmp"
 	"encoding/csv"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -37,7 +38,7 @@ Supported formats:
     - csv
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 
 		exportFormat = strings.ToLower(exportFormat)
 		isValidFormat := false
@@ -52,18 +53,22 @@ Supported formats:
 			os.Exit(1)
 		}
 
-		exportFilePath = cmp.Or(exportFilePath, filepath.Dir(globalConfig.logFile))
+		exportFilePath = cmp.Or(exportFilePath, filepath.Dir(GlobalConfig.LogFile))
+		if !filepath.IsAbs(exportFilePath) {
+			fmt.Printf("%s: export filepath must be absolute\n", formattedStringsStyled.Error)
+			os.Exit(1)
+		}
 
 		filename := fmt.Sprintf("timetreat_export_%s.%s", strings.ReplaceAll(time.Now().Format(time.DateTime), " ", "_"), exportFormat)
 		fullPath := filepath.Join(exportFilePath, filename)
-		if askForConfirmation(fmt.Sprintf("export to '%s'?", fullPath)) {
+		if AskForConfirmation(fmt.Sprintf("export to '%s'?", fullPath)) {
 			file, err := os.Create(fullPath)
-			checkErr(err)
+			CheckErr(err)
 			defer file.Close()
-			if err := exportLogFile(file, exportFormat); err != nil {
+			if err := ExportLogFile(file, exportFormat); err != nil {
 				fmt.Printf("%s: writing export file\n%s\n", formattedStringsStyled.Error, err)
 			} else {
-				fmt.Println("DONE")
+				fmt.Println(formattedStringsStyled.Ok)
 			}
 		}
 	},
@@ -75,10 +80,10 @@ func init() {
 	exportCmd.Flags().StringVarP(&exportFilePath, "dir", "d", "", "export file to this dir (default same as log file)")
 }
 
-func exportLogFile(file *os.File, format string) error {
+func ExportLogFile(file *os.File, format string) error {
 	if format == supportedExportFormats.Csv {
 		var fieldNames []string
-		entryType := reflect.TypeOf(entry{})
+		entryType := reflect.TypeOf(Entry{})
 		for i := 0; i < entryType.NumField(); i++ {
 			fieldNames = append(fieldNames, entryType.Field(i).Name)
 		}
@@ -88,7 +93,7 @@ func exportLogFile(file *os.File, format string) error {
 			return err
 		}
 
-		file, err := os.Open(globalConfig.logFile)
+		file, err := os.Open(GlobalConfig.LogFile)
 		if err != nil {
 			return err
 		}
@@ -98,15 +103,15 @@ func exportLogFile(file *os.File, format string) error {
 		if err != nil {
 			return err
 		}
+
 		fileSize := stat.Size()
 		if fileSize == 0 {
-			fmt.Println("log file is empty")
-			return nil
+			return errors.New("log file is empty")
 		}
 
 		scanner := bufio.NewScanner(file)
 		var processError error
-		var entryBuffer entry
+		var entryBuffer Entry
 		for scanner.Scan() {
 			line := scanner.Text()
 			if err = json.Unmarshal([]byte(line), &entryBuffer); err != nil {
@@ -126,14 +131,13 @@ func exportLogFile(file *os.File, format string) error {
 
 		writer.Flush()
 		if err := writer.Error(); err != nil {
-			fmt.Println("error flushing csv writer:", err)
-			return err
+			return fmt.Errorf("error flushing csv writer: %s", err)
 		}
 		if processError != nil {
 			return processError
 		}
 	} else {
-		return fmt.Errorf("export format function not found: %s\n", exportFormat)
+		return fmt.Errorf("export format function not found: %s", exportFormat)
 	}
 	return nil
 }

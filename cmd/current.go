@@ -19,19 +19,19 @@ var curCmd = &cobra.Command{
 	Aliases: []string{"cur"},
 	Short:   "Show current task information",
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 
-		curTask, _, err := getLogEntryFromEnd(0)
-		checkErr(err)
-		checkTaskIsNotZero(&curTask)
-		checkTaskIsRunning(&curTask)
+		curTask, _, err := GetLogEntryFromEnd(0)
+		CheckErr(err)
+		CheckTaskIsNotZero(&curTask)
+		CheckTaskIsRunning(&curTask)
 
 		/* style := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FAFAFA")).
 		Background(lipgloss.Color("#7D56F4"))
 		fmt.Println(style.Render(fmt.Sprintf("%+v", curTask))) */
 		start, err := time.Parse(time.RFC3339, curTask.Start)
-		checkErr(err)
+		CheckErr(err)
 
 		var output string
 		if !curProject && !curStart && !curDelta {
@@ -49,7 +49,7 @@ var curCmd = &cobra.Command{
 			}
 			if curStart {
 				start, err := time.Parse(time.RFC3339, curTask.Start)
-				checkErr(err)
+				CheckErr(err)
 				if curProject {
 					output += " - "
 				}
@@ -57,7 +57,7 @@ var curCmd = &cobra.Command{
 			}
 			if curDelta {
 				start, err := time.Parse(time.RFC3339, curTask.Start)
-				checkErr(err)
+				CheckErr(err)
 				if curProject || curStart {
 					output += " - "
 				}

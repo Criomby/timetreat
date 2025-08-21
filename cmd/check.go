@@ -16,9 +16,9 @@ var checkCmd = &cobra.Command{
 	Short: "Verify the integrity of the log file",
 	Long:  "TODO",
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 
-		file, err := os.Open(globalConfig.logFile)
+		file, err := os.Open(GlobalConfig.LogFile)
 		if err != nil {
 			fmt.Printf("%s: failed to open log file\n%s\n", formattedStringsStyled.Error, err)
 			os.Exit(1)
@@ -41,7 +41,7 @@ var checkCmd = &cobra.Command{
 		hasError := false
 		var error error
 		var line string
-		var entryBuffer entry
+		var entryBuffer Entry
 		for scanner.Scan() {
 			line = scanner.Text()
 			nLines++

@@ -17,3 +17,7 @@ symlink: build
 leaks:
 	gitleaks --no-banner dir
 	trufflehog git --log-level=-1 --fail file://.
+
+.PHONY: test
+test:
+	go test ./... -v

@@ -20,29 +20,29 @@ var stopCmd = &cobra.Command{
 	Short: "Stop the currently running task",
 	Long:  "TODO",
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 		checkArgsProjectDescription(stopProject, stopDescription)
 
-		curTask, offset, err := getLogEntryFromEnd(0)
-		checkErr(err)
-		checkTaskIsNotZero(&curTask)
-		checkTaskIsRunning(&curTask)
+		curTask, offset, err := GetLogEntryFromEnd(0)
+		CheckErr(err)
+		CheckTaskIsNotZero(&curTask)
+		CheckTaskIsRunning(&curTask)
 
 		// stop time
 		ts := time.Now().Local()
 		if stopTime != "" {
 			parsedTime, err := time.Parse(timeArgLayout, stopTime)
-			checkErr(err)
+			CheckErr(err)
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
 		}
 		if stopRound != "" {
 			rd, err := time.ParseDuration(stopRound)
-			checkErr(err)
+			CheckErr(err)
 			ts = ts.Round(rd)
 		}
 
 		start, err := time.Parse(time.RFC3339, curTask.Start)
-		checkErr(err)
+		CheckErr(err)
 		if ts.Before(start) {
 			fmt.Printf("%s: Stop time before start time\n", formattedStringsStyled.Error)
 			os.Exit(1)
@@ -77,11 +77,11 @@ var stopCmd = &cobra.Command{
 		if offset != 0 {
 			offset++
 		}
-		err = removeLastLogEntry(offset)
-		checkErr(err)
+		err = RemoveLastLogEntry(offset)
+		CheckErr(err)
 
-		err = writeLogEntry(&curTask)
-		checkErr(err)
+		err = WriteLogEntry(&curTask)
+		CheckErr(err)
 
 		fmt.Printf("stopped %s at %s\ntook %s\n", curTask.Project, ts.Format(time.TimeOnly), ts.Sub(start).Truncate(time.Second).String())
 	},
