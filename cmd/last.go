@@ -15,19 +15,19 @@ var lastCmd = &cobra.Command{
 	Short: "Get last used projects",
 	Long:  `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 
 		var offset int64 = 0
 		var projects []string
 		var lastUsedAt []string
 		for {
-			entry, newOffset, err := getLogEntryFromEnd(offset)
-			checkErr(err)
-			checkTaskIsNotZero(&entry)
+			entry, newOffset, err := GetLogEntryFromEnd(offset)
+			CheckErr(err)
+			CheckTaskIsNotZero(&entry)
 			if !slices.Contains(projects, entry.Project) {
 				projects = append(projects, entry.Project)
 				lastUsed, err := time.Parse(time.RFC3339, entry.Start)
-				checkErr(err)
+				CheckErr(err)
 				lastUsedAt = append(lastUsedAt, lastUsed.Format(time.DateTime))
 			}
 			if newOffset == 0 && err == io.EOF {

@@ -23,10 +23,10 @@ var listCmd = &cobra.Command{
 	Short:   "List activities in log",
 	Long:    `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(false)
+		EnsureLogFile(false)
 
 		var fieldNames []string
-		entryType := reflect.TypeOf(entry{})
+		entryType := reflect.TypeOf(Entry{})
 		for i := 0; i < entryType.NumField(); i++ {
 			fieldNames = append(fieldNames, entryType.Field(i).Name)
 		}
@@ -35,25 +35,25 @@ var listCmd = &cobra.Command{
 		}
 
 		termWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
-		checkErr(err)
+		CheckErr(err)
 		t := table.New().
 			Headers(fieldNames...).
 			Width(termWidth).
 			Wrap(true)
 		var offset int64 = 0
 		var nEntries int = 0
-		for nEntries <= listNum {
+		for nEntries < listNum {
 			var rowValues []string
-			entry, newOffset, readErr := getLogEntryFromEnd(offset)
-			checkErr(readErr)
-			checkTaskIsNotZero(&entry)
+			entry, newOffset, readErr := GetLogEntryFromEnd(offset)
+			CheckErr(readErr)
+			CheckTaskIsNotZero(&entry)
 			start, err := time.Parse(time.RFC3339, entry.Start)
-			checkErr(err)
+			CheckErr(err)
 			stopVal := ""
 			var stop time.Time
 			if entry.Stop != "" {
 				stop, err = time.Parse(time.RFC3339, entry.Stop)
-				checkErr(err)
+				CheckErr(err)
 				stopVal = stop.Format(time.DateTime)
 			}
 			rowValues = append(rowValues, start.Format(time.DateTime), stopVal, entry.Project, entry.Description)

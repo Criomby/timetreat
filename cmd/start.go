@@ -21,12 +21,12 @@ var startCmd = &cobra.Command{
 	Short: "Start a new tracking entry",
 	Long:  `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ensureLogFile(true)
+		EnsureLogFile(true)
 		checkArgsProjectDescription(startProject, startDescription)
 
-		prevTask, _, err := getLogEntryFromEnd(0)
-		checkErr(err)
-		if !prevTask.isZero() && prevTask.Stop == "" {
+		prevTask, _, err := GetLogEntryFromEnd(0)
+		CheckErr(err)
+		if !prevTask.IsEmpty() && prevTask.Stop == "" {
 			// TODO check if curent task is running and end it gracefully if it is
 			fmt.Println("previous task is still running, stop it first")
 			os.Exit(1)
@@ -39,7 +39,7 @@ var startCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		if startPrev == true {
-			checkTaskIsNotZero(&prevTask)
+			CheckTaskIsNotZero(&prevTask)
 			project = prevTask.Project
 		} else {
 			project = projectFlagValue
@@ -49,21 +49,21 @@ var startCmd = &cobra.Command{
 		ts := time.Now().Local()
 		if startTime != "" {
 			parsedTime, err := time.Parse(timeArgLayout, startTime)
-			checkErr(err)
+			CheckErr(err)
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
 		}
 		if startRound != "" {
 			rd, err := time.ParseDuration(stopRound)
-			checkErr(err)
+			CheckErr(err)
 			ts = ts.Round(rd)
 		}
 
-		err = writeLogEntry(&entry{
+		err = WriteLogEntry(&Entry{
 			Start:       ts.Format(time.RFC3339),
 			Project:     project,
 			Description: startDescription,
 		})
-		checkErr(err)
+		CheckErr(err)
 
 		output := ts.Format(time.TimeOnly)
 		if project != "" {

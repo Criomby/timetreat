@@ -29,7 +29,7 @@ func Execute() {
 }
 
 func init() {
-	globalConfig.logFile = getLogFilePath()
+	GlobalConfig.LogFile = getLogFilePath()
 }
 
 func getLogFilePath() string {
@@ -42,6 +42,6 @@ func getLogFilePath() string {
 		}
 	}
 	home, err := os.UserHomeDir()
-	checkErr(err)
+	CheckErr(err)
 	return home + "/timetreat.log"
 }

@@ -164,6 +164,7 @@ Customize this according to your preferences, e.g. showing only project name.
 - :white_check_mark: Start/stop from a specific time
 - :white_check_mark: Round start/stop time (e.g. `stop --round 15m`)
 - Ask to replace project name and/or description if provided but already set
+- Add optional tags to entries
 - Generate customizable reports
   - Cli tables
   - Markdown
