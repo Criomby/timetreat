@@ -2,6 +2,13 @@
 
 # This script gets the latest release from GitHub and installs it to ~/.local/bin
 
+timetreat_ascii_logo=" _   _                _                  _
+| | (_)              | |                | |
+| |_ _ _ __ ___   ___| |_ _ __ ___  __ _| |_
+| __| | '_ ' _ \ / _ \ __| '__/ _ \/ _' | __|
+| |_| | | | | | |  __/ |_| | |  __/ (_| | |_
+ \__|_|_| |_| |_|\___|\__|_|  \___|\__,_|\__|"
+
 set -e
 
 latest_release_version="$(curl -s --show-headers https://github.com/Criomby/timetreat/releases/latest | grep "location:" | sed "s/.*\///" | sed "s/\r//")"
@@ -61,12 +68,7 @@ confirm() {
   fi
 }
 
-echo -e " _   _                _                  _
-| | (_)              | |                | |
-| |_ _ _ __ ___   ___| |_ _ __ ___  __ _| |_
-| __| | '_ ' _ \ / _ \ __| '__/ _ \/ _' | __|
-| |_| | | | | | |  __/ |_| | |  __/ (_| | |_
- \__|_|_| |_| |_|\___|\__|_|  \___|\__,_|\__|
+echo -e "${timetreat_ascii_logo}
 
 Install script
 "
