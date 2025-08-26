@@ -9,7 +9,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "timetreat",
-	Version: "0.1.0-alpha",
+	Version: "0.1.0",
 	Short:   "Treat yourself to some tasty time tracking.",
 	Long: `  _   _                _                  _
  | | (_)              | |                | |
