@@ -32,8 +32,7 @@ var (
 var exportCmd = &cobra.Command{
 	Use:   "export",
 	Short: "Export log in various formats to a separate file",
-	Long: `TODO
-
+	Long: `
 Supported formats:
     - csv
 	`,

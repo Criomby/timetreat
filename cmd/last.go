@@ -13,7 +13,10 @@ import (
 var lastCmd = &cobra.Command{
 	Use:   "last",
 	Short: "Get last used projects",
-	Long:  `TODO`,
+	Long: `
+Lists the last used project names in reverse order (most recent first).
+Also lists the time where each project has been used last.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(false)
 

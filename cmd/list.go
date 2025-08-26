@@ -21,7 +21,6 @@ var listCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
 	Short:   "List activities in log",
-	Long:    `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(false)
 

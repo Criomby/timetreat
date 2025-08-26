@@ -18,7 +18,14 @@ var (
 var stopCmd = &cobra.Command{
 	Use:   "stop",
 	Short: "Stop the currently running task",
-	Long:  "TODO",
+	Long: `
+If project name is set and --project option has been passed
+will ask you whether to ignore ir override with the passed name.
+Issues a warning if the project name is empty and no name has
+been set with --project.
+
+The project name and description can have a total length of 150 utf-8 chars.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(false)
 		checkArgsProjectDescription(stopProject, stopDescription)

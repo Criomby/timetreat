@@ -14,7 +14,14 @@ import (
 var checkCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Verify the integrity of the log file",
-	Long:  "TODO",
+	Long: `
+Checks the integrity of the provided log file.
+Not only checks for valid JSON-lines entries but
+also verifies the format if the start/stop timestamps.
+
+Verifies the plausability of entries by checking that the
+stop time comes after the start time.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(false)
 		os.Exit(RunCheck())

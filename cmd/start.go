@@ -19,7 +19,6 @@ var (
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start a new tracking entry",
-	Long:  `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(true)
 		checkArgsProjectDescription(startProject, startDescription)
