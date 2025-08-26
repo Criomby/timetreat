@@ -203,7 +203,8 @@ func EnsureLogFile(create bool) {
 // ╰────────────────────────────╯
 
 // Convenience function to print errors to stderr with colored output
-// indicating an error if err != nil && err != io.EOF.
+// exiting with the error printed to stderr and exit code 1
+// if err != nil && err != io.EOF.
 func CheckErr(err error) {
 	if err != nil && err != io.EOF {
 		formattedStringsStyled.PrintfError("%s", err)
