@@ -53,7 +53,7 @@ var startCmd = &cobra.Command{
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
 		}
 		if startRound != "" {
-			rd, err := time.ParseDuration(stopRound)
+			rd, err := time.ParseDuration(startRound)
 			CheckErr(err)
 			ts = ts.Round(rd)
 		}
@@ -85,7 +85,7 @@ func init() {
 // verify the length of project name and description
 func checkArgsProjectDescription(project string, description string) {
 	if len(project)+len(description) > maxLenProDesc {
-		fmt.Fprintf(os.Stderr, "%s: project name and description too long (max %d chars, is %d chars)\n", formattedStringsStyled.Error, maxLenProDesc, len(project)+len(description))
+		formattedStringsStyled.PrintfError("project name and description too long (max %d chars, is %d chars)", maxLenProDesc, len(project)+len(description))
 		os.Exit(1)
 	}
 }

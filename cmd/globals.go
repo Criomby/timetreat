@@ -35,6 +35,18 @@ type formattedStrings struct {
 	Error   string
 }
 
+func (f *formattedStrings) PrintfOk(format string, a ...any) {
+	fmt.Printf("%s: %s\n", f.Ok, fmt.Sprintf(format, a...))
+}
+
+func (f *formattedStrings) PrintfWarning(format string, a ...any) {
+	fmt.Printf("%s: %s\n", f.Warning, fmt.Sprintf(format, a...))
+}
+
+func (f *formattedStrings) PrintfError(format string, a ...any) {
+	fmt.Fprintf(os.Stderr, "%s: %s\n", f.Error, fmt.Sprintf(format, a...))
+}
+
 var formattedStringsStyled *formattedStrings = &formattedStrings{
 	Ok:      lipgloss.NewStyle().Foreground(lipgloss.Color("10")).Render("Ok"),
 	Warning: lipgloss.NewStyle().Foreground(lipgloss.Color("11")).Render("Warning"),
@@ -191,10 +203,11 @@ func EnsureLogFile(create bool) {
 // ╰────────────────────────────╯
 
 // Convenience function to print errors to stderr with colored output
-// indicating an error if err != nil && err != io.EOF.
+// exiting with the error printed to stderr and exit code 1
+// if err != nil && err != io.EOF.
 func CheckErr(err error) {
 	if err != nil && err != io.EOF {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", formattedStringsStyled.Error, err)
+		formattedStringsStyled.PrintfError("%s", err)
 		os.Exit(1)
 	}
 }
@@ -229,4 +242,23 @@ func AskForConfirmation(prompt string) bool {
 		os.Exit(1)
 		return false
 	}
+}
+
+func AskForInputInOptions(prompt string, options []string) (string, error) {
+	inputError := fmt.Errorf("%s %v\n", "input must be one of", options)
+	fmt.Printf("%s ", prompt)
+	reader := bufio.NewReader(os.Stdin)
+	input, err := reader.ReadString('\n')
+	CheckErr(err)
+	input = strings.ToLower(strings.TrimSpace(input))
+	if len(input) != 1 {
+		return "", inputError
+	}
+
+	for _, option := range options {
+		if strings.Contains(input, option) {
+			return string(option), nil
+		}
+	}
+	return "", inputError
 }

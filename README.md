@@ -62,11 +62,7 @@ If you want to use multiple different log files see advanced usage below.
 1. Fist-time setup: Use the `start` command to create the log file. It will ask you to create a log file at the default or configured location.
 2. Start a new entry with `start`. You don't have to specify a project name and description right away. You can leave it empty and when you `stop` the tracking later you can optionally provide the project name and an description or append to the existing description if already present. The use case for that is that I often found myself initially wanting to work on something but ended up working on something else or wanting to add additional items to the description I didn't think about when starting the task and before I `stop` the tracking without having to change existing entries or using multiple commands.
 
-Typical workflow examples:
-
-```shell
-TODO
-```
+**See below for typical workflow examples.**
 
 ## Commands
 
@@ -76,43 +72,105 @@ TODO
 
 *Start a new tracking entry.*
 
-TODO
+```shell
+# without a project name start now
+timetreat start
+
+# with project
+timetreat start -p subscript
+
+# long project name
+timetreat start -p "project code completion"
+
+# start tracking afterwards (e.g. it is now 9 a.m. but started at 8:30)
+timetreat start -t 08:30
+
+# round start time to 15 mins
+# e.g. it's now 8:16
+timetreat start -r 15m  # starts at 8:15
+# or round to 30 mins
+timetreat start -r 15m  # starts at 8:30
+```
 
 - **stop**
 
 *Stop the currently running task.*
 
-TODO
+```shell
+timetreat stop
+
+# stop in 10 mins (assume it's 11 a.m.)
+timetreat stop -t 11:10
+
+# round stop time to 15 mins
+# e.g. if it's 11:23, will stop at 11:30
+timetreat stop -r 15m
+
+# add/append description
+timetreat stop -d "some additional detail"
+```
 
 - **current**
 
 *Show current task information.*
 
-TODO
+```shell
+# get full current task info
+timetreat current
+
+# alias to cur
+timetreat cur
+
+# get only project or only duration of current task
+timetreat cur --project
+timetreat cur --duration
+# same as:
+timetreat cur -p
+timetreat cur -d
+# etc.
+```
 
 - **list**
 
 *List activities in log.*
 
-TODO
+```shell
+timetreat list
+
+# is aliased to ls
+timetreat ls
+
+# show each entry's duration
+timetreat ls -d
+```
 
 - **last**
 
 *Get last used projects.*
 
-TODO
+```shell
+timetreat last
+```
 
 - **export**
 
 *Export log in various formats to a separate file.*
 
-TODO
+```shell
+# exports to csv relative to log file by default
+timetreat export
+
+# export to specific dir
+timetreat export -d ~/Downloads
+```
 
 - **check**
 
 *Verify the integrity of the log file.*
 
-TODO
+```shell
+timetreat check
+```
 
 <br>
 

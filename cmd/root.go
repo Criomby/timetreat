@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -37,7 +36,7 @@ func getLogFilePath() string {
 		if filepath.IsAbs(env) {
 			return env
 		} else {
-			fmt.Printf("%s: log file path must be absolute: %s\n", formattedStringsStyled.Error, env)
+			formattedStringsStyled.PrintfError("log file path must be absolute: %s", env)
 			os.Exit(1)
 		}
 	}
