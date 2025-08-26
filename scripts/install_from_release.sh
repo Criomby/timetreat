@@ -100,21 +100,27 @@ if [ "${found}" -eq 0 ]; then
     exit 1
 fi
 
-download_asset_name="timetreat_${platform}_${arch}.tar.gz"
+download_asset_name="timetreat_${latest_release_version:1}_${platform}_${arch}.tar.gz"
 asset_download_url="${download_url}/${download_asset_name}"
 
 confirm "Install?"
 
-echo
+echo -e "\nDownloading from ${download_url}\n"
 
 temp_dir="$(mktemp -d)"
 cd ${temp_dir}
-curl -sSO ${asset_download_url}
-curl -sSO ${asset_download_url}.sha256
+
+echo -e "${download_asset_name}"
+curl -LO ${asset_download_url}
+echo
+echo -e "${download_asset_name}.sha256"
+curl -LO ${asset_download_url}.sha256
+echo
 shasum -c ${download_asset_name}.sha256
+echo
 tar -xzf ${download_asset_name}
 /bin/cp -f timetreat ~/.local/bin/
-cd -
+
 rm -r ${temp_dir}
 
-echo -e "\nTimetreat installed successfully!"
+echo -e "Timetreat installed successfully!"

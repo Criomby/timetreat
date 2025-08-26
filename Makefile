@@ -5,6 +5,10 @@ build:
 	mkdir -p build
 	go build -o ./build
 
+.PHONY: build-all
+build-all:
+	bash scripts/build_all.sh --archive
+
 .PHONY: install
 install: build
 	cp ./build/timetreat ~/.local/bin/timetreat
