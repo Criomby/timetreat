@@ -15,22 +15,23 @@
 
 ### Release
 
-**TODO**
+- Using the [installer script](https://raw.githubusercontent.com/Criomby/timetreat/refs/heads/main/scripts/install_from_release.sh):
 
-Using the installer script:
+  - Linux & macOS:
 
-- Linux & macOS:
 ```sh
 curl -sS https://raw.githubusercontent.com/Criomby/timetreat/refs/heads/main/scripts/install_from_release.sh | bash
 ```
 
 Make sure `~/.local/bin` is in your PATH.
 
-Or manually download the latest release from the releases section.
-
 The installer script does not support Windows but I'd suggest you use WSL2 anyways and install the linux version.
 
-### Source
+- Manual Download
+
+Manually download the latest release from the [releases section](https://github.com/Criomby/timetreat/releases).
+
+### Build From Source
 
 ```
 git clone https://github.com/Criomby/timetreat.git
@@ -40,6 +41,8 @@ make install
 # or symlink to build in local repo for fast rebuilding of latest branch version
 # make symlink
 ```
+
+<br>
 
 ## Config
 
