@@ -53,7 +53,7 @@ var startCmd = &cobra.Command{
 			ts = time.Date(ts.Year(), ts.Month(), ts.Day(), parsedTime.Hour(), parsedTime.Minute(), 0, 0, ts.Location())
 		}
 		if startRound != "" {
-			rd, err := time.ParseDuration(stopRound)
+			rd, err := time.ParseDuration(startRound)
 			CheckErr(err)
 			ts = ts.Round(rd)
 		}
