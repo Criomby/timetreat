@@ -17,7 +17,7 @@ var checkCmd = &cobra.Command{
 	Long:  "TODO",
 	Run: func(cmd *cobra.Command, args []string) {
 		EnsureLogFile(false)
-		os.Exit(runCheck())
+		os.Exit(RunCheck())
 	},
 }
 
@@ -25,7 +25,7 @@ func init() {
 	rootCmd.AddCommand(checkCmd)
 }
 
-func runCheck() int {
+func RunCheck() int {
 	file, err := os.Open(GlobalConfig.LogFile)
 	if err != nil {
 		formattedStringsStyled.PrintfError("failed to open log file\n%s", err)
