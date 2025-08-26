@@ -44,7 +44,7 @@ var stopCmd = &cobra.Command{
 		start, err := time.Parse(time.RFC3339, curTask.Start)
 		CheckErr(err)
 		if ts.Before(start) {
-			fmt.Printf("%s: Stop time before start time\n", formattedStringsStyled.Error)
+			formattedStringsStyled.PrintfError("stop time before start time")
 			os.Exit(1)
 		}
 
@@ -52,9 +52,16 @@ var stopCmd = &cobra.Command{
 
 		// project name
 		if curTask.Project == "" && stopProject == "" {
-			fmt.Printf("%s: empty project name\n", formattedStringsStyled.Warning)
+			formattedStringsStyled.PrintfWarning("empty project name")
 		} else if curTask.Project == "" && stopProject != "" {
 			curTask.Project = stopProject
+		} else {
+			formattedStringsStyled.PrintfWarning("project name exists: %s", curTask.Project)
+			answer, err := AskForInputInOptions("[i] ignore or [o] override?", []string{"i", "o"})
+			CheckErr(err)
+			if answer == "o" {
+				curTask.Project = stopProject
+			}
 		}
 
 		// description

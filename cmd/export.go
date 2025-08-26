@@ -49,13 +49,13 @@ Supported formats:
 			}
 		}
 		if !isValidFormat {
-			fmt.Printf("%s: unsupported format specified: %s\n", formattedStringsStyled.Error, exportFormat)
+			formattedStringsStyled.PrintfError("unsupported format specified: %s", exportFormat)
 			os.Exit(1)
 		}
 
 		exportFilePath = cmp.Or(exportFilePath, filepath.Dir(GlobalConfig.LogFile))
 		if !filepath.IsAbs(exportFilePath) {
-			fmt.Printf("%s: export filepath must be absolute\n", formattedStringsStyled.Error)
+			formattedStringsStyled.PrintfError("export filepath must be absolute")
 			os.Exit(1)
 		}
 
@@ -66,7 +66,7 @@ Supported formats:
 			CheckErr(err)
 			defer file.Close()
 			if err := ExportLogFile(file, exportFormat); err != nil {
-				fmt.Printf("%s: writing export file\n%s\n", formattedStringsStyled.Error, err)
+				formattedStringsStyled.PrintfError("writing export file\n%s", err)
 			} else {
 				fmt.Println(formattedStringsStyled.Ok)
 			}

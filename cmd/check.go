@@ -20,14 +20,14 @@ var checkCmd = &cobra.Command{
 
 		file, err := os.Open(GlobalConfig.LogFile)
 		if err != nil {
-			fmt.Printf("%s: failed to open log file\n%s\n", formattedStringsStyled.Error, err)
+			formattedStringsStyled.PrintfError("failed to open log file\n%s", err)
 			os.Exit(1)
 		}
 		defer file.Close()
 
 		stat, err := file.Stat()
 		if err != nil {
-			fmt.Printf("%s: failed to get log file stats\n%s\n", formattedStringsStyled.Error, err)
+			formattedStringsStyled.PrintfError("failed to get log file stats\n%s", err)
 			os.Exit(1)
 		}
 		fileSize := stat.Size()
@@ -45,9 +45,10 @@ var checkCmd = &cobra.Command{
 		for scanner.Scan() {
 			line = scanner.Text()
 			nLines++
-			error = json.Unmarshal([]byte(line), &entryBuffer)
-			if error != nil {
+			err := json.Unmarshal([]byte(line), &entryBuffer)
+			if err != nil {
 				hasError = true
+				error = err
 				break
 			}
 			timeStart, err := time.Parse(time.RFC3339, entryBuffer.Start)
@@ -69,17 +70,16 @@ var checkCmd = &cobra.Command{
 					break
 				}
 			} else {
-				fmt.Printf("%s: empty stop value in line %d\n", formattedStringsStyled.Warning, nLines)
+				formattedStringsStyled.PrintfWarning("empty stop value in line %d", nLines)
 			}
 		}
 
 		if err := scanner.Err(); err != nil {
-			fmt.Printf("%s: reading log file\n%s\n", formattedStringsStyled.Error, err)
-			os.Exit(1)
+			formattedStringsStyled.PrintfError("reading log file\n%s", err)
 		}
 
 		if hasError {
-			fmt.Printf(": %s\nline %d: %s\n", formattedStringsStyled.Error, nLines, line)
+			formattedStringsStyled.PrintfError("%s\nline %d: %s", error, nLines, line)
 		} else {
 			fmt.Println(formattedStringsStyled.Ok)
 		}
