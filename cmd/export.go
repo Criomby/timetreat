@@ -55,7 +55,7 @@ Supported formats:
 
 		exportFilePath = cmp.Or(exportFilePath, filepath.Dir(GlobalConfig.LogFile))
 		if !filepath.IsAbs(exportFilePath) {
-			formattedStringsStyled.PrintfError("export filepath must be absolute")
+			formattedStringsStyled.PrintfError("export dir must be an absolute path")
 			os.Exit(1)
 		}
 
