@@ -25,3 +25,7 @@ leaks:
 .PHONY: test
 test:
 	go test ./... -v
+
+.PHONY: release
+	bash scripts/release.sh
+	git push --atomic --follow-tags

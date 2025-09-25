@@ -62,14 +62,14 @@ The project name and description can have a total length of 150 utf-8 chars.
 			formattedStringsStyled.PrintfWarning("empty project name")
 		} else if curTask.Project == "" && stopProject != "" {
 			curTask.Project = stopProject
-		} else {
+		} else if curTask.Project != "" && stopProject != "" {
 			formattedStringsStyled.PrintfWarning("project name exists: %s", curTask.Project)
 			answer, err := AskForInputInOptions("[i] ignore or [o] override?", []string{"i", "o"})
 			CheckErr(err)
 			if answer == "o" {
 				curTask.Project = stopProject
 			}
-		}
+		} // else if curTask.Project != "" && stopProject == ""  {}
 
 		// description
 		if curTask.Description == "" && stopDescription == "" {
